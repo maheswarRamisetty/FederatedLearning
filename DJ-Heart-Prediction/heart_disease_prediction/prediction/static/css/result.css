@@ -1,0 +1,173 @@
+body {
+    font-family: 'Urbanist', sans-serif;
+    position: relative;
+    max-width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #0f172a;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url(../static/images/img1.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: brightness(30%) blur(5px);
+    z-index: -1;
+}
+
+h1, h2 {
+    font-family: 'Chivo', sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #f43f5e;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    margin: 1.5rem 0;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #e11d48;
+    margin: 1rem 0;
+}
+
+.form-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem;
+    justify-content: center;
+}
+
+.form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 380px;
+}
+
+.form:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+input, select {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #e11d48;
+    padding: 0.8rem;
+    color: #ffffff;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    width: 100%;
+    margin: 0.5rem 0;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #f43f5e;
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 6px rgba(244, 63, 94, 0.7);
+}
+
+label {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    display: block;
+    text-align: left;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 1.5rem 0;
+    gap: 1rem;
+}
+
+.buttons button {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 1rem;
+    background: linear-gradient(to right, #f43f5e, #e11d48);
+    border: none;
+    padding: 0.7rem 2rem;
+    border-radius: 0.5rem;
+    color: #f1f5f9;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.buttons button:hover {
+    background: linear-gradient(to left, #f43f5e, #e11d48);
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(244, 63, 94, 0.3);
+}
+
+#predictionResult {
+    color: #10b981;
+    font-size: 1.5rem;
+    text-shadow: 0 1px 4px rgba(16, 185, 129, 0.8);
+}
+
+.prediction-value p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+#disclaimer {
+    color: #fbbf24;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.team-members ul li {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #f1f5f9;
+    margin: 0.3rem 0;
+}
+
+@media screen and (max-width: 1024px) {
+    .form-main {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .form {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .buttons button {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}

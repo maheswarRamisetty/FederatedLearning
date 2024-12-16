@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federated Learning Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Pacifico&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4f15497914.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Inria Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            background-color: #1d4ed8;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #1e293b;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav p {
+            font-size: 24px;
+            color: #ff6347;
+            font-weight: bold;
+            margin: 0;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .nav .nav-item {
+            font-size: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .nav .nav-item:hover {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding-top: 80px;
+            background: linear-gradient(180deg, #2575fc, #6a11cb);
+            border-radius: 15px;
+        }
+
+        .content h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-bar {
+            width: 80%;
+            max-width: 400px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #ff7f50, #ff4500);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .completed-status {
+            font-size: 18px;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .status-button {
+            background-color: #10b981;
+        }
+
+        .status-button:hover {
+            background-color: #059669;
+        }
+
+        .stop-button {
+            background-color: #ef4444;
+        }
+
+        .stop-button:hover {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/xai-features" class="nav-item">XAi Features</a>
+        <a href="/results" class="nav-item">Results</a>
+    </nav>
+
+    <div class="content">
+        <h1>Federated Learning Control</h1>
+
+        <div class="button-group">
+            <button id="triggerBtn" class="btn">Start Clients</button>
+            <button id="startBtn" class="btn">ReStart FL Server</button>
+            <button id="statusBtn" class="status-button btn">Check Status</button>
+            <button id="stopBtn" class="stop-button btn">Stop Federated Learning</button>
+        </div>
+
+        <div class="loading-bar" id="loadingBar" style="display: none;">
+            <div class="loading-bar-fill" id="loadingBarFill"></div>
+        </div>
+
+        <p id="completionStatus" class="completed-status">Complete the Federated Learning process before making predictions.</p>
+    </div>
+
+    <script>
+        let federated_learning_completed = false;
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            fetch('http://localhost:8000/start-federated-learning', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Federated Learning Server Started!') {
+                        document.getElementById('completionStatus').innerText = 'Federated Learning is in progress. Please wait...';
+                    }
+                });
+        });
+
+        document.getElementById('triggerBtn').addEventListener('click', () => {
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingBarFill = document.getElementById('loadingBarFill');
+            const completionStatus = document.getElementById('completionStatus');
+            
+            loadingBar.style.display = 'block';
+            let progress = 0;
+            let stageIndex = 0;
+            const stages = ['Executing Client 1...', 'Executing Client 2...', 'Executing Client 3...','Performing Analysis','Aggregating Weights', 'Execution Complete!'];
+            const interval = setInterval(() => {
+                if (progress < 100) {
+                    progress += 15;
+                    loadingBarFill.style.width = progress + '%';
+                    completionStatus.innerText = stages[stageIndex];
+                    stageIndex = Math.min(stageIndex + 1, stages.length - 1);
+                } else {
+                    clearInterval(interval);
+                    completionStatus.innerText = 'Federated Learning is completed! You can now make predictions.';
+                    loadingBar.style.display = 'none';
+                }
+            }, 1000);
+
+            fetch('http://localhost:8000/trigger-client-execution', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Client Execution Triggered!') {
+                        completionStatus.innerText = 'Executing Client 1...';
+                    }
+                });
+        });
+
+        document.getElementById('statusBtn').addEventListener('click', () => {
+            fetch('http://localhost:8000/check-federated-learning-status', { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.completed) {
+                        document.getElementById('completionStatus').innerText = 'Federated Learning is completed! You can now make predictions.';
+                    } else {
+                        document.getElementById('completionStatus').innerText = 'Federated Learning is still in progress.';
+                    }
+                });
+        });
+
+     
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            fetch('http://localhost:8000/stop-federated-learning', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Federated Learning Stopped!') {
+                        document.getElementById('completionStatus').innerText = 'Federated Learning has been stopped.';
+                    }
+                });
+        });
+    </script>
+</body>
+
+</html>
